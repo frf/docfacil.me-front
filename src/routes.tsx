@@ -1,18 +1,28 @@
-import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import React, {useContext} from 'react';
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import { SnackbarProvider } from 'notistack';
+import AuthContext from './contexts/auth';
+import SignRoutes from './SignRoutes';
+import PrivateRoutes from './PrivateRoutes';
 
-import Home from './pages/HomePage';
 import Footer from './pages/Footer'
 
 function Routes() {
+    const { signed } = useContext(AuthContext);
+    console.log(signed)
     return (
         <Router>
-        <Navbar />
-        <Switch>
-            <Route path='/' exact component={Home} />
-        </Switch>
-        <Footer />
+            <Navbar />
+            <SnackbarProvider maxSnack={3} anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}>
+            <Switch>
+                {signed ? <PrivateRoutes /> : <SignRoutes />};
+            </Switch>
+            </SnackbarProvider>
+            <Footer />
         </Router>
     )
 }
