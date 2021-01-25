@@ -6,11 +6,17 @@ import './styles.css';
 import { MdFingerprint } from 'react-icons/md';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { IconContext } from 'react-icons/lib';
+import { useAuth } from '../../contexts/auth';
 
 function Navbar() {
+  const { signed, Logout } = useAuth();
   const [click, setClick] = useState(false);
   // eslint-disable-next-line
   const [button, setButton] = useState(true);
+
+  function handleClickLogout() {
+    Logout();
+  }
 
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
@@ -47,16 +53,22 @@ function Navbar() {
                   Home
                 </Link>
               </li>
-              <li className='nav-item'>
+              {signed ? <li className='nav-item'>
                 <Link to='/upload' className='nav-links' onClick={closeMobileMenu}>
                   Upload
                 </Link>
-              </li>
+              </li> : ''}
+              {!signed ?
               <li className='nav-item'>
                 <Link to='/login' className='nav-links' onClick={closeMobileMenu}>
                   Login
                 </Link>
               </li>
+              : <li className='nav-item'>
+              <Link to='' onClick={handleClickLogout} className='nav-links'>
+                Sair
+              </Link>
+            </li> }
             </ul>
           </div>
         </nav>

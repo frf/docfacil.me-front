@@ -12,9 +12,7 @@ const FormLogin: React.FC<{}> = memo(() => {
   const onFinish = useCallback(
     async (values: any) => {
       try {
-        console.log(values);
         // const req = await authService.authenticateInApp(values);
-        // console.log(req);
         enqueueSnackbar('Login realizado com sucesso', { 
             variant: 'success',
         });

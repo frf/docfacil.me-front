@@ -5,33 +5,27 @@ import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useSnackbar } from 'notistack';
 import {useAuth} from '../../contexts/auth';
+import { Redirect } from 'react-router-dom';
 
 const FormLogin: React.FC<{}> = memo(() => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const context = useAuth();
- 
-  function handleLogin(values: any) {
-    console.log(values);
-    context.Login();
-  }
+  const { Login } = useAuth();
+  async function handleLogin(values: any) {
+      try {
+        await Login(values);
+        enqueueSnackbar('Login realizado com sucesso', { 
+            variant: 'success',
+        });
 
-  // const onFinish = useCallback(
-  //   async (values: any) => {
-  //     try {
-  //       console.log(values);
-  //       context.Login();
-  //       enqueueSnackbar('Login realizado com sucesso', { 
-  //           variant: 'success',
-  //       });
-  //     } catch {
-  //       enqueueSnackbar('Falha ao atualizar afiliado', { 
-  //           variant: 'error',
-  //       });
-  //     } finally {
-  //     }
-  //   },[enqueueSnackbar]
-  // );
+        return <Redirect to='/upload' />
+      } catch {
+        enqueueSnackbar('Falha ao efetuar login', { 
+            variant: 'error',
+        });
+      } finally {
+      }
+  }
  
   return (
           <Form
@@ -44,11 +38,11 @@ const FormLogin: React.FC<{}> = memo(() => {
             // onFinishFailed={onFinishFailed}
           >
         <Form.Item
-          name="username"
+          name="email"
           rules={[
             {
               required: true,
-              message: 'Please input your Username!',
+              message: 'Please input your E-mail!',
             },
           ]}
         >
@@ -66,7 +60,6 @@ const FormLogin: React.FC<{}> = memo(() => {
           <Input
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
-            placeholder="Password"
           />
         </Form.Item>
         {/* <Form.Item>
